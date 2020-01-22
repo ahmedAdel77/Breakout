@@ -226,7 +226,7 @@ function ballBrickCollision() {
                 if (ball.x + ball.radius > b.x && ball.x - ball.radius < b.x + brick.width &&
                 ball.y + ball.radius > b.y && ball.y - ball.radius < b.y + brick.height) {
 
-                    BRICK_HIT.play();
+                    // BRICK_HIT.play();
 
                     ball.dy = -ball.dy;
 
