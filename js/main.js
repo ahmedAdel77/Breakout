@@ -1,4 +1,5 @@
 /********************* Variables *********************/
+//Canvas
 let canvas = $('#breakout')[0];
 let ctx = canvas.getContext('2d');
     //Paddle
@@ -9,6 +10,18 @@ const paddle_margin_bottom = 50;
 let ballRadius = 8;
 let life = 5;
     
+
+//Image
+const img = new Image();
+img.src = "images/bg.jpg";
+
+//Paddle
+const paddle_Width = 100;
+const paddle_Height = 20;
+const paddle_margin_bottom = 50;
+let leftArrow = false;
+let rightArrow = false;
+
 
 /********************* Objects *********************/
 
@@ -71,3 +84,41 @@ function moveBall() {
 
 drawPaddle();
 drawBall();
+// Move Paddle 
+function movePaddle() {
+    //preventing paddle to go out canvas
+    if (rightArrow && paddle.x + paddle_Width < canvas.width) {
+        paddle.x += paddle.dx;
+    } else if (leftArrow && paddle.x > 0) {
+        paddle.x -= paddle.dx;
+    }
+}
+
+/********************* Events *********************/
+
+$(document).on("keydown", function (e) {
+    if (e.keyCode == 37) {
+        leftArrow = true;
+    } else if (e.keyCode == 39) {
+        rightArrow = true;
+    }
+})
+
+// On releasing the keys
+$(document).on("keyup", function (e) {
+    if (e.keyCode == 37) {
+        leftArrow = false;
+    } else if (e.keyCode == 39) {
+        rightArrow = false;
+    }
+});
+
+function loop() {
+    ctx.drawImage(img, 0, 0, 700, 600);
+    drawPaddle();
+    movePaddle();
+    //keep calling loop function everytime browser is ready to render next frame
+    requestAnimationFrame(loop);
+
+}
+loop();
