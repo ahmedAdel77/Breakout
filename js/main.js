@@ -284,6 +284,16 @@ function draw() {
     //Show Level
     showGameStats(Level, canvas.width / 2, 25, levelImg, canvas.width / 2 - 30, 5);
 }
+
+function gameOver() {
+    if (life <= 0) {
+        showGameStats(life, canvas.width - 25, 25, lifeImg, canvas.width - 55, 5);
+        GAME_OVER = true;
+        showYoulOSE();
+    }
+}
+
+
 function update() {
     if (spacePressed) {
         movePaddle();
@@ -325,6 +335,17 @@ $(document).on("keyup", function (e) {
 $(document).on('keypress', function (e) {
     spacePressed = true;
 });
+
+// SHOW YOU LOSE
+function showYoulOSE() {
+    youlose.css("display", "block");
+
+    gameover.css({
+        "display": "block",
+        'margin': '140px 37%'
+    });
+}
+
 
 
 // Starting point
