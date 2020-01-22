@@ -115,6 +115,30 @@ function resetBall() {
     paddle.y = canvas.height - paddle_Height - paddle_margin_bottom;
 }
 
+// When the ball collides with paddle
+function ballPaddleCollision() {
+    // if the ball collides with paddle but its height less than the paddle's height (still in the bounds of the canvas)
+    if (ball.x > paddle.x && ball.x < paddle.x + paddle.width &&
+        ball.y > paddle.y && ball.y < paddle.y + paddle.height) {
+
+        // if the ball collides in the center .. the point is 0
+        let collidePoint = ball.x - (paddle.x + paddle.width / 2);
+        collidePoint = collidePoint / (paddle.width / 2);
+
+        // if the ball doesn't collides in the center ..  the point is calculated
+        let angle = collidePoint * (Math.PI / 3);
+        ball.dx = ball.speed * Math.sin(angle);
+        ball.dy = -ball.speed * Math.cos(angle);
+
+        /*
+            -60 (if the ball collides right side of the paddle)
+            0 (center)
+            60 (if the ball collides right side of the paddle)
+            otherwise it's calculated from Math method
+        */
+    }
+}
+
 function draw() {
     drawPaddle();
     drawBall();
@@ -125,6 +149,7 @@ function update() {
         moveBall();
     }
     ballWallCollision();
+    ballPaddleCollision();
 }
 
 function loop() {
