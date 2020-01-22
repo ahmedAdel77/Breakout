@@ -1,3 +1,24 @@
+/**************************** Images *************************/
+
+//Backgound image
+const img = new Image();
+img.src = "images/bg.jpg";
+
+//Score image
+const scoreImg = new Image();
+scoreImg.src = "images/score.png";
+
+//Life image
+const lifeImg = new Image();
+lifeImg.src = "images/life.png";
+
+//Level image
+const levelImg = new Image();
+levelImg.src = "images/level.png";
+
+const bgImg = new Image();
+bgImg.scr = "images/background6.gif";
+
 /********************* Variables *********************/
     //Canvas
 let canvas = $('#breakout')[0];
@@ -10,9 +31,6 @@ let leftArrow = false;
 let rightArrow = false;
     // Ball
 let ballRadius = 8;
-    //Image
-const img = new Image();
-img.src = "images/bg.jpg";
    //Bricks
 let bricks = [];
     // Others
@@ -20,8 +38,12 @@ let life = 5;
 let spacePressed = false;
 
 
+let Level = 1; //start level game 
+let maxLevel = 2; // number of leve game 
+
+
 let SCORE = 0; //start score 
-const SCORE_UNIT = 5; //end score hy722o kol ma yksr brick :) 
+const SCORE_UNIT = 5; //end score hy722o kol ma yksr brick :) :)
 
 /********************* Objects *********************/
 
@@ -235,11 +257,32 @@ function ballBrickCollision() {
     }
 }
 
+// byzhar pic w text by3bar 3n game stats (score -- life -- levels )
+function showGameStats(text, textX, textY, img, imgX, imgY) {
+    // draw text 
+    ctx.fillStyle = "#FFF";
+    ctx.font = "25px Germania One";
+    ctx.fillText(text, textX, textY);
+
+    // draw image
+    ctx.drawImage(img, imgX, imgY, width = 25, height = 25);
+}
+
 
 function draw() {
     drawPaddle();
     drawBall();
     drawBricks();
+
+    
+    //Show Score
+    showGameStats(SCORE, 35, 25, scoreImg, 5, 5);
+
+    //Show Life
+    showGameStats(life, canvas.width - 25, 25, lifeImg, canvas.width - 55, 5);
+
+    //Show Level
+    showGameStats(Level, canvas.width / 2, 25, levelImg, canvas.width / 2 - 30, 5);
 }
 function update() {
     if (spacePressed) {
