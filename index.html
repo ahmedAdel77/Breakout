@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,15 +8,29 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-    <canvas id="breakout" width="700" height="600"></canvas>
 
-   
 
-    
+    <div class="container">
+        <!-- <div class="sound">
+            <img src="images/SOUND_ON.png" alt="sound_on" id="sound">
+        </div> -->
 
-    
+        <div id="gameover">
+            <img src="images/youwon.png" alt="youwon" id="youwon">
+            <img src="images/gameover.png" alt="youlose" id="youlose">
+            <div id="restart">Play Again!</div>
+        </div>
+
+
+        <div class="canvas">
+            <canvas id="breakout" width="700" height="600"></canvas>
+        </div>
+
+    </div>
     <script src="js/jquery-3.4.1.min.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>
