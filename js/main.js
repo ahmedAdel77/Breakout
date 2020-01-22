@@ -13,7 +13,8 @@ let ballRadius = 8;
     //Image
 const img = new Image();
 img.src = "images/bg.jpg";
-
+   //Bricks
+let bricks = [];
     // Others
 let life = 5;
 let spacePressed = false;
@@ -38,6 +39,20 @@ const ball = {
     speed: 7,
     dx: 3,
     dy: -3
+}
+
+const brick = {
+    row: 4,
+    column: 7,
+    width: 70,
+    height: 20,
+    offSetLeft: 25,
+    offSetTop: 25,
+    marginTop: 55,
+    fillColor: "rgb(46, 53, 72)",
+    strokeColor: "#ffcd05",
+    color: "rgba(46, 53, 72, 0.5)",
+    transparent: "transparent"
 }
 
 /********************* Functions *********************/
@@ -86,6 +101,7 @@ function moveBall() {
     ball.x += ball.dx;
     ball.y += ball.dy;
 }
+
 
 // When the ball collides with wall
 function ballWallCollision() {
@@ -139,9 +155,43 @@ function ballPaddleCollision() {
     }
 }
 
+//Create Bricks
+function createBricks() {
+
+    for (let r = 0; r < brick.row; r++) {
+        bricks[r] = [];
+        for (let c = 0; c < brick.column; c++) {
+            bricks[r][c] = {
+                x: c * (brick.offSetLeft + brick.width) + brick.offSetLeft,
+                y: r * (brick.offSetTop + brick.height) + brick.offSetTop + brick.marginTop,
+                // the brick is not broken
+                // status: true
+                status: 1
+            }
+        }
+    }
+}
+createBricks();
+
+//Draw Bricks
+function drawBricks() {
+    for (let r = 0; r < brick.row; r++) {
+        for (let c = 0; c < brick.column; c++) {
+            let b = bricks[r][c];
+            if (b.status == 1) {
+                ctx.fillStyle = brick.fillColor;
+                ctx.fillRect(b.x, b.y, brick.width, brick.height);
+                ctx.strokeStyle = brick.strokeColor;
+                ctx.strokeRect(b.x, b.y, brick.width, brick.height);
+            }
+        }
+    }
+}
+
 function draw() {
     drawPaddle();
     drawBall();
+    drawBricks();
 }
 function update() {
     if (spacePressed) {
