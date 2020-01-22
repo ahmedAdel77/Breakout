@@ -10,11 +10,13 @@ let leftArrow = false;
 let rightArrow = false;
     // Ball
 let ballRadius = 8;
-let life = 5;
     //Image
 const img = new Image();
 img.src = "images/bg.jpg";
 
+    // Others
+let life = 5;
+let spacePressed = false;
 
 /********************* Objects *********************/
 
@@ -85,6 +87,24 @@ function moveBall() {
     ball.y += ball.dy;
 }
 
+function draw() {
+    drawPaddle();
+    drawBall();
+}
+function update() {
+    if (spacePressed) {
+        movePaddle();
+        moveBall();
+    }
+}
+
+function loop() {
+    ctx.drawImage(img, 0, 0, 700, 600);
+    draw();
+    update();
+    //keep calling loop function everytime browser is ready to render next frame
+    requestAnimationFrame(loop);
+};
 
 /********************* Events *********************/
 
@@ -105,14 +125,10 @@ $(document).on("keyup", function (e) {
     }
 });
 
-function loop() {
-    ctx.drawImage(img, 0, 0, 700, 600);
-    drawPaddle();
-    movePaddle();
-    drawBall();
-    moveBall();
-    //keep calling loop function everytime browser is ready to render next frame
-    requestAnimationFrame(loop);
+$(document).on('keypress', function (e) {
+    spacePressed = true;
+});
 
-}
+
+// Starting point
 loop();
