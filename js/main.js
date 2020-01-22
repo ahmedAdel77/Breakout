@@ -2,7 +2,7 @@
 
 //Backgound image
 const img = new Image();
-img.src = "images/bg.jpg";
+img.src = 'images/night-view-of-sky-920534.jpg';
 
 //Score image
 const scoreImg = new Image();
@@ -18,6 +18,23 @@ levelImg.src = "images/level.png";
 
 const bgImg = new Image();
 bgImg.scr = "images/background6.gif";
+
+/********************* Sounds *********************/
+
+const WALL_HIT = new Audio();
+WALL_HIT.src = "sounds/wall.mp3";
+
+const LIFE_LOST = new Audio();
+LIFE_LOST.src = "sounds/life_lost.mp3";
+
+const PADDLE_HIT = new Audio();
+PADDLE_HIT.src = "sounds/paddle_hit.mp3";
+
+const WIN = new Audio();
+WIN.src = "sounds/win.mp3";
+
+const BRICK_HIT = new Audio();
+BRICK_HIT.src = "sounds/brick_hit.mp3";
 
 /********************* Variables *********************/
 //Canvas
@@ -78,19 +95,19 @@ const brick = {
     offSetLeft: 25,
     offSetTop: 25,
     marginTop: 55,
-    fillColor: "rgb(46, 53, 72)",
-    strokeColor: "#ffcd05",
-    color: "rgba(46, 53, 72, 0.5)",
+    fillColor: "#6e0000",
+    strokeColor: "#ccc",
+    color: "rgba(181, 5, 5, 0.2)",
     transparent: "transparent"
 }
 
 /********************* Functions *********************/
 
-// Draw Paddle
+// drawing paddle
 function drawPaddle() {
-    ctx.fillStyle = "#2e3548";
+    ctx.fillStyle = "#000";
     ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-    ctx.strokeStyle = "#ffcd05";
+    ctx.strokeStyle = "#FFCF13";
     ctx.strokeRect(paddle.x, paddle.y, paddle.width, paddle.height);
 }
 
@@ -106,7 +123,7 @@ function drawBall() {
 
     ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
 
-    ctx.fillStyle = '#ff0'; // Background
+    ctx.fillStyle = '#eee'; // Background
     ctx.fill();
 
     ctx.strokeStyle = '#000'; // Border
@@ -137,14 +154,17 @@ function ballWallCollision() {
     // if the ball collides right side .. x is decreased
     if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
         ball.dx = -ball.dx;
+        WALL_HIT.play();
     }
     // if the ball collides top side .. y is increased
     if (ball.y - ball.radius < 0) {
         ball.dy = -ball.dy;
+        WALL_HIT.play();
     }
     // if the ball collides down side .. life is decreased and reset the ball
     if (ball.y + ball.radius > canvas.height) {
         life--;
+        LIFE_LOST.play();
         resetBall();
     }
 }
@@ -165,6 +185,9 @@ function ballPaddleCollision() {
     // if the ball collides with paddle but its height less than the paddle's height (still in the bounds of the canvas)
     if (ball.x > paddle.x && ball.x < paddle.x + paddle.width &&
         ball.y > paddle.y && ball.y < paddle.y + paddle.height) {
+
+        // Play Sound
+        PADDLE_HIT.play();
 
         // if the ball collides in the center .. the point is 0
         let collidePoint = ball.x - (paddle.x + paddle.width / 2);
@@ -231,7 +254,7 @@ function ballBrickCollision() {
                 if (ball.x + ball.radius > b.x && ball.x - ball.radius < b.x + brick.width &&
                     ball.y + ball.radius > b.y && ball.y - ball.radius < b.y + brick.height) {
 
-                    // BRICK_HIT.play();
+                    BRICK_HIT.play();
 
                     ball.dy = -ball.dy;
 
@@ -309,7 +332,7 @@ function levelUp() {
     if (isLevelDone) {
         spacePressed = false;
 
-        // WIN.play();
+        WIN.play();
         if (Level >= maxLevel) {
             showYouWon();
             GAME_OVER = true;
@@ -368,6 +391,21 @@ $(document).on("keyup", function (e) {
 $(document).on('keypress', function (e) {
     spacePressed = true;
 });
+
+function audioManager() {
+    // CHANGE IMAGE SOUND ON/OFF
+    let imgSrc = soundElement.attr("src");
+    let SOUND_IMG = imgSrc == "images/SOUND_ON.png" ? "images/SOUND_OFF.png" : "images/SOUND_ON.png";
+
+    soundElement.attr('src', SOUND_IMG);
+
+    // MUTE AND UNMUTE SOUNDS
+    WALL_HIT.muted = WALL_HIT.muted ? false : true;
+    PADDLE_HIT.muted = PADDLE_HIT.muted ? false : true;
+    BRICK_HIT.muted = BRICK_HIT.muted ? false : true;
+    WIN.muted = WIN.muted ? false : true;
+    LIFE_LOST.muted = LIFE_LOST.muted ? false : true;
+}
 
 // SHOW GAME OVER MESSAGE
 /** SELECT ELEMENTS */
