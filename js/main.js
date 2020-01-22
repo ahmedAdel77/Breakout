@@ -20,20 +20,20 @@ const bgImg = new Image();
 bgImg.scr = "images/background6.gif";
 
 /********************* Variables *********************/
-    //Canvas
+//Canvas
 let canvas = $('#breakout')[0];
 let ctx = canvas.getContext('2d');
-    //Paddle
+//Paddle
 const paddle_Width = 100;
 const paddle_Height = 20;
 const paddle_margin_bottom = 50;
 let leftArrow = false;
 let rightArrow = false;
-    // Ball
+// Ball
 let ballRadius = 8;
-   //Bricks
+//Bricks
 let bricks = [];
-    // Others
+// Others
 let life = 5;
 let spacePressed = false;
 
@@ -41,9 +41,12 @@ let spacePressed = false;
 let Level = 1; //start level game 
 let maxLevel = 2; // number of leve game 
 
+let GAME_OVER = false;
 
 let SCORE = 0; //start score 
 const SCORE_UNIT = 5; //end score hy722o kol ma yksr brick :) :)
+
+ctx.lineWidth = 3;
 
 /********************* Objects *********************/
 
@@ -220,39 +223,39 @@ function ballBrickCollision() {
         for (let c = 0; c < brick.column; c++) {
             let b = bricks[r][c];
             // fe 7al en el ball lesa m5bttsh fee el brick 
-            let b2 = {...b};
+            let b2 = {
+                ...b
+            };
 
             if (b.status == 1) { // soda
                 if (ball.x + ball.radius > b.x && ball.x - ball.radius < b.x + brick.width &&
-                ball.y + ball.radius > b.y && ball.y - ball.radius < b.y + brick.height) {
+                    ball.y + ball.radius > b.y && ball.y - ball.radius < b.y + brick.height) {
 
                     // BRICK_HIT.play();
 
                     ball.dy = -ball.dy;
 
                     b.status = 0.5;
-                    
+
                     SCORE += SCORE_UNIT;
                 }
-            }
-
-            else if (b.status == 0.5) { // zr2a
+            } else if (b.status == 0.5) { // zr2a
                 ctx.fillStyle = brick.color;
                 ctx.fillRect(b2.x, b2.y, brick.width, brick.height);
                 ctx.strokeStyle = brick.strokeColor;
                 ctx.strokeRect(b2.x, b2.y, brick.width, brick.height);
-                
+
                 if (ball.x + ball.radius > b.x && ball.x - ball.radius < b.x + brick.width &&
                     ball.y + ball.radius > b.y && ball.y - ball.radius < b.y + brick.height) {
-                        ctx.fillStyle = brick.transparent;
-                        ctx.fillRect(b2.x, b2.y, brick.width, brick.height);
-                        ctx.strokeStyle = brick.transparent;
-                        ctx.strokeRect(b2.x, b2.y, brick.width, brick.height);
-                        b.status = 0;
-                        ball.dy = -ball.dy;
-                        SCORE += SCORE_UNIT * 2;
+                    ctx.fillStyle = brick.transparent;
+                    ctx.fillRect(b2.x, b2.y, brick.width, brick.height);
+                    ctx.strokeStyle = brick.transparent;
+                    ctx.strokeRect(b2.x, b2.y, brick.width, brick.height);
+                    b.status = 0;
+                    ball.dy = -ball.dy;
+                    SCORE += SCORE_UNIT * 2;
                 }
-            } 
+            }
         }
     }
 }
@@ -274,7 +277,7 @@ function draw() {
     drawBall();
     drawBricks();
 
-    
+
     //Show Score
     showGameStats(SCORE, 35, 25, scoreImg, 5, 5);
 
@@ -293,6 +296,33 @@ function gameOver() {
     }
 }
 
+function levelUp() {
+    let isLevelDone = true;
+
+    // check if all bricks are broken
+    for (let r = 0; r < brick.row; r++) {
+        for (let c = 0; c < brick.column; c++) {
+            isLevelDone = isLevelDone && bricks[r][c].status == 0;
+        }
+    }
+
+    if (isLevelDone) {
+        spacePressed = false;
+
+        // WIN.play();
+        if (Level >= maxLevel) {
+            showYouWon();
+            GAME_OVER = true;
+            return;
+        }
+
+        createBricks();
+        ball.speed += 4;
+        paddle.dx += 3;
+        resetBall();
+        Level++;
+    }
+}
 
 function update() {
     if (spacePressed) {
@@ -303,6 +333,9 @@ function update() {
     ballPaddleCollision();
 
     ballBrickCollision();
+
+    gameOver();
+    levelUp();
 }
 
 function loop() {
@@ -335,6 +368,29 @@ $(document).on("keyup", function (e) {
 $(document).on('keypress', function (e) {
     spacePressed = true;
 });
+
+// SHOW GAME OVER MESSAGE
+/** SELECT ELEMENTS */
+const gameover = $('#gameover');
+const youwon = $('#youwon');
+const youlose = $('#youlose');
+const restart = $('#restart');
+
+
+// CLICK ON PLAY AGGAIN BUTTION
+restart.on('click', () => {
+    location.reload(); // RELAOD PAGE
+});
+
+// SHOW YOU WIN
+function showYouWon() {
+    youwon.css("display", "block");
+
+    gameover.css({
+        "display": "block",
+        'margin': '140px 37%'
+    });
+}
 
 // SHOW YOU LOSE
 function showYoulOSE() {
