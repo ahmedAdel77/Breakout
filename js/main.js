@@ -87,6 +87,34 @@ function moveBall() {
     ball.y += ball.dy;
 }
 
+// When the ball collides with wall
+function ballWallCollision() {
+    // if the ball collides right side .. x is decreased
+    if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+        ball.dx = -ball.dx;
+    }
+    // if the ball collides top side .. y is increased
+    if (ball.y - ball.radius < 0) {
+        ball.dy = -ball.dy;
+    }
+    // if the ball collides down side .. life is decreased and reset the ball
+    if (ball.y + ball.radius > canvas.height) {
+        life--;
+        resetBall();
+    }
+}
+
+// reset the ball to the default position
+function resetBall() {
+    ball.x = canvas.width / 2;
+    ball.y = paddle.y - ballRadius;
+    ball.dx = 3 * (Math.random() * 2 - 1) // range between -3 and 3 .. because el ball moves in different positions
+    ball.dy = -3;
+
+    paddle.x = canvas.width / 2 - paddle_Width / 2;
+    paddle.y = canvas.height - paddle_Height - paddle_margin_bottom;
+}
+
 function draw() {
     drawPaddle();
     drawBall();
@@ -96,6 +124,7 @@ function update() {
         movePaddle();
         moveBall();
     }
+    ballWallCollision();
 }
 
 function loop() {
