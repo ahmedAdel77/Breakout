@@ -1,26 +1,19 @@
 /********************* Variables *********************/
-//Canvas
+    //Canvas
 let canvas = $('#breakout')[0];
 let ctx = canvas.getContext('2d');
     //Paddle
 const paddle_Width = 100;
 const paddle_Height = 20;
 const paddle_margin_bottom = 50;
+let leftArrow = false;
+let rightArrow = false;
     // Ball
 let ballRadius = 8;
 let life = 5;
-    
-
-//Image
+    //Image
 const img = new Image();
 img.src = "images/bg.jpg";
-
-//Paddle
-const paddle_Width = 100;
-const paddle_Height = 20;
-const paddle_margin_bottom = 50;
-let leftArrow = false;
-let rightArrow = false;
 
 
 /********************* Objects *********************/
@@ -76,14 +69,6 @@ function drawBall() {
     ctx.closePath();
 }
 
-// Move Ball
-function moveBall() {
-    ball.x += ball.dx;
-    ball.y += ball.dy;
-}
-
-drawPaddle();
-drawBall();
 // Move Paddle 
 function movePaddle() {
     //preventing paddle to go out canvas
@@ -93,6 +78,13 @@ function movePaddle() {
         paddle.x -= paddle.dx;
     }
 }
+
+// Move Ball
+function moveBall() {
+    ball.x += ball.dx;
+    ball.y += ball.dy;
+}
+
 
 /********************* Events *********************/
 
@@ -117,6 +109,8 @@ function loop() {
     ctx.drawImage(img, 0, 0, 700, 600);
     drawPaddle();
     movePaddle();
+    drawBall();
+    moveBall();
     //keep calling loop function everytime browser is ready to render next frame
     requestAnimationFrame(loop);
 
