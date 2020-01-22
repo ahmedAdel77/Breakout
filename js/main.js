@@ -291,6 +291,8 @@ function update() {
     }
     ballWallCollision();
     ballPaddleCollision();
+
+    ballBrickCollision();
 }
 
 function loop() {
