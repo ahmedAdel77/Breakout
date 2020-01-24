@@ -257,9 +257,7 @@ function ballBrickCollision() {
                     BRICK_HIT.play();
 
                     ball.dy = -ball.dy;
-
                     b.status = 0.5;
-
                     SCORE += SCORE_UNIT;
                 }
             } else if (b.status == 0.5) { // zr2a
@@ -270,6 +268,9 @@ function ballBrickCollision() {
 
                 if (ball.x + ball.radius > b.x && ball.x - ball.radius < b.x + brick.width &&
                     ball.y + ball.radius > b.y && ball.y - ball.radius < b.y + brick.height) {
+
+                    BRICK_HIT.play();
+
                     ctx.fillStyle = brick.transparent;
                     ctx.fillRect(b2.x, b2.y, brick.width, brick.height);
                     ctx.strokeStyle = brick.transparent;
